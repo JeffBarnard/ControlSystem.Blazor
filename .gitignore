@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Blazor.Wasm.ControlSystem/Client/obj
+/Blazor.Wasm.ControlSystem/Client/bin
+/Blazor.Wasm.ControlSystem/Server/obj
+/Blazor.Wasm.ControlSystem/Server/bin
+/Blazor.Wasm.ControlSystem/Shared/obj
+/Blazor.Wasm.ControlSystem/Shared/bin
