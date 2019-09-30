@@ -1,1 +1,1 @@
-# Blazor.Wasm.ControlSystemPrototype
+# Blazor.Wasm.ControlSystem
