@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Blazor.Wasm.ControlSystem.Shared
 {
-    public class WeatherForecast
+    public class Step
     {
         public DateTime Date { get; set; }
 
