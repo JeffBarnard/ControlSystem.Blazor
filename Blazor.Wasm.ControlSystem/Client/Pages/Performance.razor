@@ -1,0 +1,24 @@
+﻿@page "/performance"
+
+<style>
+    .image-center {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        left: 0;
+        right: 0;
+    }
+</style>
+
+<img class="image-center" src="https://learn.getgrav.org/user/pages/11.troubleshooting/01.page-not-found/error-404.png" />
+
+
+@code {
+    int currentCount = 0;
+
+    void IncrementCount()
+    {
+        currentCount++;
+    }
+}

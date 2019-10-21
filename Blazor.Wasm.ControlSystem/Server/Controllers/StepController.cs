@@ -12,9 +12,13 @@ namespace Blazor.Wasm.ControlSystem.Server.Controllers
     [Route("[controller]")]
     public class StepController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
+        private static readonly Step[] Steps = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            new Step{ StepId = 1, Name = "Step 1", State = StepState.NotSet },
+            new Step{ StepId = 2, Name = "Step 2", State = StepState.NotSet },
+            new Step{ StepId = 3, Name = "Step 3", State = StepState.NotSet },
+            new Step{ StepId = 4, Name = "Step 4", State = StepState.NotSet },
+            new Step{ StepId = 5, Name = "Step 5", State = StepState.NotSet },            
         };
 
         private readonly ILogger<StepController> logger;
@@ -27,14 +31,7 @@ namespace Blazor.Wasm.ControlSystem.Server.Controllers
         [HttpGet]
         public IEnumerable<Step> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Step
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return Steps;
         }
     }
 }

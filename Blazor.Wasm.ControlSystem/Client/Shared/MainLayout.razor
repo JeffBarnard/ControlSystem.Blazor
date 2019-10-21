@@ -1,15 +1,196 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
-</div>
+<style>
+    .sidebar {
+        background: #FFFFFF;
+    }
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
-    </div>
+    .background_Light {
+        background: #F1F1F1;
+    }
 
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+    .Content_Light {
+        background: #F1F1F1;
+    }
+
+    .Menu_Light {
+        background: #FDFDFD;
+    }
+
+    .Background_Dark {
+        background: #212121;
+    }
+
+    .Content_Dark {
+        background: #424242;
+    }
+
+    .Menu_Dark {
+        background: #303030;
+    }
+
+    /*.flex-container {
+        display: flex;
+        align-items: stretch;
+    }*/
+
+    /*.flex-container > div {
+
+    }*/
+
+    .mdc-list-item {
+        margin-bottom: 12px;
+    }
+
+    .mat-list-bottom {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        left: 0px;
+    }
+
+    .menu {
+        /*float: left;
+        height:100vh;
+        width:68px;*/
+        width: 68px;
+        position: fixed;
+        bottom: 0;
+        top: 0;
+        margin-top: 64px;
+        z-index: 1;
+    }
+
+    .content {
+        /*height:100vh;
+        width:100%;*/
+        padding-left: 68px;
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        right: 0;
+        left: 0;
+        padding-top: 62px;
+    }
+</style>
+
+<MatDrawerContainer Style="width: 100vw; height: 100vh;">
+    <MatDrawer Class="sidebar" @bind-Opened="@NavOpened" Mode="@MatDrawerMode.Modal">
+        <NavMenu OnClick="@MenuClicked" SettingsClickAction="@(() => SettingsClick(null))" />
+    </MatDrawer>
+    <MatDrawerContent>
+        <MatAppBarContainer>
+            <MatAppBar Fixed="true">
+                <div class="mat-elevation-z3">
+                    <MatAppBarRow>
+                        <MatAppBarSection>
+                            <MatIconButton Icon="menu" OnClick="@MenuClicked"></MatIconButton>
+                            <img height="38" width="38" style="padding-left: 16px;" src="https://cdn.iconscout.com/icon/free/png-512/bmw-5-202750.png" />
+                            <MatAppBarTitle>Factory Control Station</MatAppBarTitle>
+                        </MatAppBarSection>
+                        <MatAppBarSection Align="@MatAppBarSectionAlign.End">
+                            <MatIconButton Icon="account_circle" OnClick="@ProfileClick" @ref="accountbutton"></MatIconButton>
+                        </MatAppBarSection>
+                    </MatAppBarRow>
+                </div>
+            </MatAppBar>
+
+            <MatAppBarContent>
+                <div class="menu mat-elevation-z3">
+                    <MatList>
+                        <MatListItem href="/">
+                            <MatTooltip Tooltip="Process" Position="@MatTooltipPosition.Bottom">
+                                <MatIcon RefBack="@context" Class="icon-color" Style="margin:auto;" Icon="format_list_numbered"></MatIcon>
+                            </MatTooltip>
+                        </MatListItem>
+                        <MatListItem href="instruction">
+                            <MatTooltip Tooltip="Instruction" Position="@MatTooltipPosition.Bottom">
+                                <MatIcon RefBack="@context" Class="icon-color" Style="margin:auto;" Icon="picture_as_pdf"></MatIcon>
+                            </MatTooltip>
+                        </MatListItem>
+                        <MatListItem href="performance">
+                            <MatTooltip Tooltip="Performance" Position="@MatTooltipPosition.Bottom">
+                                <MatIcon RefBack="@context" Class="icon-color" Style="margin:auto;" Icon="assessment"></MatIcon>
+                            </MatTooltip>
+                        </MatListItem>
+                        <MatListItem class="mat-list-bottom" @onclick="@SettingsClick">
+                            <MatTooltip Tooltip="Settings" Position="@MatTooltipPosition.Top">
+                                <MatIcon RefBack="@context" Class="icon-color" Style="margin:auto;" Icon="settings"></MatIcon>
+                            </MatTooltip>
+                        </MatListItem>
+                    </MatList>
+                </div>
+                <div class="content">
+                    @Body
+                </div>
+            </MatAppBarContent>
+
+        </MatAppBarContainer>
+    </MatDrawerContent>
+</MatDrawerContainer>
+
+<MatMenu @ref="Menu">
+    <MatList>
+        <MatListItem @onclick="@AccountClick">Account</MatListItem>
+        <MatListItem @onclick="@LogoutClicked">Logout</MatListItem>
+    </MatList>
+</MatMenu>
+
+<MatDialog @bind-IsOpen="@settingsDialogIsOpen">
+    <MatDialogTitle>Settings</MatDialogTitle>
+    <MatDialogContent>
+        <SettingsDialog />
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@(e => { settingsDialogIsOpen = false; })">OK</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+<MatDialog @bind-IsOpen="@accountDialogIsOpen">
+    <MatDialogTitle>Hi, Jeff Barnard</MatDialogTitle>
+    <MatDialogContent>
+        <AccountDialog />
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@(e => { accountDialogIsOpen = false; })">OK</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+@code {
+
+    public bool NavOpened { get; set; }
+    bool accountDialogIsOpen = false;
+    bool settingsDialogIsOpen = false;
+
+    [Inject]
+    protected IMatToaster Toaster { get; set; }
+
+    public void MenuClicked()
+    {
+        NavOpened = !NavOpened;
+    }
+
+    MatIconButton accountbutton;
+    BaseMatMenu Menu;
+
+    public void ProfileClick(MouseEventArgs e)
+    {
+        this.Menu.OpenAsync(accountbutton.Ref);
+    }
+
+    public void SettingsClick(MouseEventArgs e)
+    {
+        settingsDialogIsOpen = true;
+    }
+
+    public void AccountClick(MouseEventArgs e)
+    {
+        accountDialogIsOpen = true;
+    }
+
+    public void LogoutClicked()
+    {
+         Toaster.Add("Logging out shortly", MatToastType.Info);
+    }
+
+}

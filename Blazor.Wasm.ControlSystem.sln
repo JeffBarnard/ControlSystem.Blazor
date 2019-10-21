@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Wasm.ControlSystem.Server", "Blazor.Wasm.ControlSystem\Server\Blazor.Wasm.ControlSystem.Server.csproj", "{DE0A0618-36B2-465C-A98C-DBD0E8C01A70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Wasm.ControlSystem.Server", "Blazor.Wasm.ControlSystem\Server\Blazor.Wasm.ControlSystem.Server.csproj", "{DE0A0618-36B2-465C-A98C-DBD0E8C01A70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Wasm.ControlSystem.Client", "Blazor.Wasm.ControlSystem\Client\Blazor.Wasm.ControlSystem.Client.csproj", "{40B8F9B2-C44A-4E2F-AC8B-2C88E891BB64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Wasm.ControlSystem.Client", "Blazor.Wasm.ControlSystem\Client\Blazor.Wasm.ControlSystem.Client.csproj", "{40B8F9B2-C44A-4E2F-AC8B-2C88E891BB64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Wasm.ControlSystem.Shared", "Blazor.Wasm.ControlSystem\Shared\Blazor.Wasm.ControlSystem.Shared.csproj", "{57E1FC9B-3CB3-4B69-8BAF-300515B6AF65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Wasm.ControlSystem.Shared", "Blazor.Wasm.ControlSystem\Shared\Blazor.Wasm.ControlSystem.Shared.csproj", "{57E1FC9B-3CB3-4B69-8BAF-300515B6AF65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
