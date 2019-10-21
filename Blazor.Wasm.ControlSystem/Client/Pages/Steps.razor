@@ -1,0 +1,44 @@
+﻿@using Blazor.Wasm.ControlSystem.Shared
+@inject HttpClient Http
+
+<style>
+    .dot {
+      height: 25px;
+      width: 25px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+    }
+</style>
+
+@if (steps == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <span style="width:280px;display:inline-block; float:left;">
+        <MatList>
+            @foreach (var step in steps)
+            {
+                <MatListItem>
+                    <span class="dot"></span>
+                    <span>@step.Name</span>
+                </MatListItem>
+            }
+        </MatList>
+    </span>
+    <span style="display:inline-block; float:left;">
+        <Checklist />
+    </span>
+}
+
+@code {
+    Step[] steps;
+
+    protected override async Task OnInitializedAsync()
+    {
+        steps = await Http.GetJsonAsync<Step[]>("Step");
+    }
+
+}

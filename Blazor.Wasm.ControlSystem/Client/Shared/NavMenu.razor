@@ -1,37 +1,96 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Blazor.Wasm.ControlSystem</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
+﻿<style>
+    .nav-link {  display: block;  padding: 0.5rem 1rem;}
+    .nav-link:hover, .nav-link:focus {  text-decoration: none;}
+    .nav-link.disabled {  color: #6c757d;  pointer-events: none;  cursor: default;}
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
+    /*.mat-list-bottom {       
+        position: absolute; 
+        bottom:8px;
+    }*/
+    
+    .header-icon{
+        padding-top:4px; 
+        text-align:center;
+    }
+
+    .navList {
+        /*margin-top:64px;*/ 
+        /*margin-bottom:0px*/
+        position:relative;
+    }
+
+    .mdc-list-item-icon {
+        padding-left: 14px;
+    }
+
+    .mdc-list-item-text{
+        padding-left: 16px;
+    }
+
+    .navListBottom {        
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        left: 0px;
+    }
+
+</style>
+
+<div @onclick="OnClick">
+    <div class="header-icon">        
+        @*<img height="62" width="62" src="http://danpatrascu.com/wp-content/uploads/2019/05/blazorlogo.png" />
+        <img height="62" width="62" src="https://upload.wikimedia.org/wikipedia/commons/c/c6/Web_Assembly_Logo.svg" />*@
+        <MatTooltip Tooltip="Built with Blazor">
+            <img height="62" src="https://www.tuannguyen.tech/wp-content/uploads/2019/05/WebAssembly-logo.jpg" />
+        </MatTooltip>
+    </div>
+
+    <div class="navList">
+        <MatList>
+            <MatListItem Style="margin-left:0px; margin-bottom:18px;" href="" Match="NavLinkMatch.All">
+                <MatTooltip Tooltip="Process">
+                    <MatIcon Class="icon-color mdc-list-item-icon" Icon="format_list_numbered"></MatIcon>
+                    <span class="mdc-list-item-text">Process</span>
+                </MatTooltip>
+            </MatListItem>
+            <MatListItem Style="margin-left:0px; margin-bottom:18px;" href="instruction">
+                @*<NavLink class="nav-link" href="instruction">*@
+                <MatTooltip Tooltip="Instruction">
+                    <MatIcon Class="icon-color mdc-list-item-icon" Icon="picture_as_pdf"></MatIcon>
+                    <span class="mdc-list-item-text">Instruction</span>
+                </MatTooltip>
+                @*</NavLink>*@
+            </MatListItem>
+            <MatListItem Style="margin-left:0px; margin-bottom:18px;" href="performance">
+                <MatTooltip Tooltip="Performance">
+                    <MatIcon Class="icon-color mdc-list-item-icon" Icon="assessment"></MatIcon>
+                    <span class="mdc-list-item-text">Performance</span>
+                </MatTooltip>
+            </MatListItem>
+        </MatList>
+    </div>
+    <div class="navListBottom">
+        <MatList>
+            <MatListItem Style="margin-left:0px;" @onclick="@OnSettingsClick">
+                <MatTooltip Tooltip="Settings">
+                    <MatIcon Class="icon-color mdc-list-item-icon" Icon="settings"></MatIcon>
+                    <span class="mdc-list-item-text">Settings</span>
+                </MatTooltip>
+            </MatListItem>
+        </MatList>
+    </div>
 </div>
 
 @code {
-    bool collapseNavMenu = true;
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
 
-    string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    [Parameter]
+    public Action SettingsClickAction { get; set; }
 
-    void ToggleNavMenu()
+    private void OnSettingsClick()
     {
-        collapseNavMenu = !collapseNavMenu;
+        SettingsClickAction?.Invoke();
     }
+
 }

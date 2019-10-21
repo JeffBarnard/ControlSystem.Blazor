@@ -1,0 +1,69 @@
+﻿<style>
+    .demo-mat-blazor-theme-color-item {
+        display: inline-flex;
+        width: 36px;
+        height: 36px;
+        vertical-align: top;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+        padding-right:2px;
+    }
+
+</style>    
+<div style="padding-top:16px;">
+    Debug Mode
+    <span style="padding-left:24px;">
+        <MatSlideToggle></MatSlideToggle>
+    </span>    
+</div>
+<div style="padding-top:16px; display: inline-flex;">
+    Theme
+    <span style="padding-left:66px;">
+        <span class="demo-mat-blazor-theme-color-item" @onclick="@OnLightClick" style="background: #ff9800" />
+        <span class="demo-mat-blazor-theme-color-item" @onclick="@OnDarkClick" style="background: #424242" />
+        <span class="demo-mat-blazor-theme-color-item" @onclick="@OnBlueClick" style="background: #01579b" />
+    </span>
+</div>
+
+@code {
+
+    [Inject]
+    public Theme Theme { get; set; }
+
+    //protected override void OnInitialized()
+    //{
+    //    Theme = new Theme() {
+    //        MatTheme = new MatTheme()
+    //        {
+    //            Primary = MatThemeColors.Blue._500.Value,
+    //            Secondary = MatThemeColors.BlueGrey._500.Value,
+    //        },
+    //    };
+    //}
+
+    public void OnLightClick()
+    {
+        Theme.MatTheme.Primary = MatThemeColors.Orange._500.Value;
+        Theme.MatTheme.Secondary = MatThemeColors.Orange._200.Value;
+        Theme.MatTheme.ThemeHasChanged();
+    }
+
+    public void OnDarkClick()
+    {
+        Theme.MatTheme.Primary = "#263238";
+        Theme.MatTheme.Secondary = MatThemeColors.Grey._500.Value;
+        Theme.MatTheme.ThemeHasChanged();
+        //Background = MatThemeColors.Grey._100.Value,
+        //Surface = MatThemeColors.Grey._700.Value,
+    }
+
+    public void OnBlueClick()
+    {
+        Theme.MatTheme.Primary = MatThemeColors.Blue._500.Value;
+        Theme.MatTheme.Secondary = MatThemeColors.BlueGrey._500.Value;
+        Theme.MatTheme.ThemeHasChanged();
+        //Background = MatThemeColors.Grey._100.Value,
+        //Surface = MatThemeColors.Grey._700.Value,
+    }
+}
