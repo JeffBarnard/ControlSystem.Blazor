@@ -1,17 +1,33 @@
-﻿
-<div style="height:100px;">
-    <MatTextField></MatTextField>
-</div>
-<div style="height:100px;">
-    <MatTextField></MatTextField>
-</div>
-<div style="height:100px;">
-    <MatTextField></MatTextField>
-</div>
-<div style="height:100px;">
-    <MatTextField></MatTextField>
+﻿@using Blazor.Wasm.ControlSystem.Shared;
+
+<style>
+    .container{
+        padding:12px;
+    }
+
+    .td-field {
+        padding-left:72px;
+        padding-top:12px;
+    }
+
+</style>
+
+<div class="container">
+    <table>
+        @foreach (var operation in Operations)
+        {
+            <tr>
+                <td>@operation.Label</td>
+                <td class="td-field">
+                    <MatTextField Label="@operation.Hint" @bind-Value="@operation.Value"></MatTextField>
+                </td>
+            </tr>
+
+        }
+    </table>
 </div>
 
 @code {
-
+    [Parameter]
+    public List<Operation> Operations { get; set; }
 }

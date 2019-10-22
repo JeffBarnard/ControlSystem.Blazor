@@ -10,6 +10,7 @@ namespace Blazor.Wasm.ControlSystem.Shared
         public string Name { get; set; }
         public StepState State { get; set; }
 
+        public List<Operation> Operations { get; set; }
     }
 
     public enum StepState : int

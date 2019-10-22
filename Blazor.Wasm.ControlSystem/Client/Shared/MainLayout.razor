@@ -1,10 +1,15 @@
 ﻿@inherits LayoutComponentBase
 
 <style>
+
+    .mdc-top-app-bar__row {
+            height: 64px;
+    }
+
     .sidebar {
         background: #FFFFFF;
     }
-
+       
     .background_Light {
         background: #F1F1F1;
     }
@@ -29,17 +34,9 @@
         background: #303030;
     }
 
-    /*.flex-container {
-        display: flex;
-        align-items: stretch;
-    }*/
-
-    /*.flex-container > div {
-
-    }*/
-
     .mdc-list-item {
-        margin-bottom: 12px;
+        height:72px;
+        margin:0px;
     }
 
     .mat-list-bottom {
@@ -50,9 +47,7 @@
     }
 
     .menu {
-        /*float: left;
-        height:100vh;
-        width:68px;*/
+        background: #F1F1F1;
         width: 68px;
         position: fixed;
         bottom: 0;
@@ -60,10 +55,14 @@
         margin-top: 64px;
         z-index: 1;
     }
-
+   
+    @@media (max-width: 599px) {
+         .menu {
+            visibility:hidden;
+            width:0px;
+        }
+    }
     .content {
-        /*height:100vh;
-        width:100%;*/
         padding-left: 68px;
         position: absolute;
         bottom: 0;
@@ -72,6 +71,13 @@
         left: 0;
         padding-top: 62px;
     }
+
+     @@media (max-width: 599px) {
+         .content {
+           padding-left: 0px;
+        }
+    }
+
 </style>
 
 <MatDrawerContainer Style="width: 100vw; height: 100vh;">
@@ -98,7 +104,7 @@
             <MatAppBarContent>
                 <div class="menu mat-elevation-z3">
                     <MatList>
-                        <MatListItem href="/">
+                        <MatListItem href="">
                             <MatTooltip Tooltip="Process" Position="@MatTooltipPosition.Bottom">
                                 <MatIcon RefBack="@context" Class="icon-color" Style="margin:auto;" Icon="format_list_numbered"></MatIcon>
                             </MatTooltip>
