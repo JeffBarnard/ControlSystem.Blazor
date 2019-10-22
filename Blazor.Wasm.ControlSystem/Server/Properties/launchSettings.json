@@ -2,6 +2,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/Blazor.Wasm.ControlSystem.Server",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:61043/",
       "sslPort": 0
@@ -16,7 +20,7 @@
       }
     },
     "Blazor.Wasm.ControlSystem.Server": {
-      "commandName": "Project",
+      "commandName": "IIS",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

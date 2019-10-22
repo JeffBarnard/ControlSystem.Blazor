@@ -6,12 +6,17 @@ namespace Blazor.Wasm.ControlSystem.Shared
 {
     public class Step
     {
-        public DateTime Date { get; set; }
+        public int StepId { get; set; }
+        public string Name { get; set; }
+        public StepState State { get; set; }
 
-        public int TemperatureC { get; set; }
+        public List<Operation> Operations { get; set; }
+    }
 
-        public string Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public enum StepState : int
+    {
+        NotSet,
+        Started,
+        Completed
     }
 }
