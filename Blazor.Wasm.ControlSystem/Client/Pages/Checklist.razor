@@ -1,33 +1,62 @@
 ﻿@using Blazor.Wasm.ControlSystem.Shared;
 
 <style>
-    .container{
-        padding:12px;
+    .container {
+        padding: 12px;
+    }
+
+    .td-label{
+        /*min-width:260px;*/
     }
 
     .td-field {
-        padding-left:72px;
-        padding-top:12px;
+        padding-left: 72px;
+        padding-top: 12px;
+    }
+
+    .text-field {
+        width: 280px;
     }
 
 </style>
 
 <div class="container">
-    <table>
-        @foreach (var operation in Operations)
-        {
-            <tr>
-                <td>@operation.Label</td>
-                <td class="td-field">
-                    <MatTextField Label="@operation.Hint" @bind-Value="@operation.Value"></MatTextField>
-                </td>
-            </tr>
+    <EditForm Model="@Operations">
+        @*EditContext="@EditContext"*@
+        <DataAnnotationsValidator />
+        <table>
+            @foreach (var operation in Operations)
+            {
+                <tr>
+                    <td class="td-label">@operation.Label</td>
+                    <td class="td-field">
+                        @*<InputText id="identifier" @bind-Value="@operation.Value" />*@
+                        <MatTextField Class="text-field" Label="@operation.Hint" @bind-Value="@operation.Value"></MatTextField>
+                        <ValidationMessage For="@(() => operation.Value)" />
+                    </td>
+                </tr>
+            }
+        </table>
 
-        }
-    </table>
+        <button type="submit">Submit</button>
+    </EditForm>
 </div>
 
+
 @code {
+
+    public EditContext EditContext;
+
     [Parameter]
-    public List<Operation> Operations { get; set; }
+    public ICollection<Operation> Operations { get; set; }
+
+    //protected override void OnInitialized()
+    //{
+    //    // Force evaluation on init
+    //    EditContext = new EditContext(Operations);
+    //    //EditContext.Validate();
+
+    //    base.OnInitialized();
+    //}
+
 }
