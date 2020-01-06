@@ -61,19 +61,17 @@
         
 </style>
 
-@if (steps == null)
-{
+@if (steps == null) {
     <p><em> Loading...</em></p>
 }
 else
 {
     <span class="steplist">
         <MatList @ref="@StepListComponent">
-            @foreach (var step in steps)
-            {
+            @foreach (var step in steps) {
                 <MatListItem Class="steplist-item" @key="step" @onclick="@(() => { this.selectedStep = step; })">
                     <span class="dot"></span>
-                    <span class="stepName">@step.Name</span>         
+                    <span class="stepName">@step.Name</span>
                     @if (step.StepId == 1)
                     {
                     <span class="moreIcon">
@@ -140,14 +138,14 @@ else
 
     public MatList StepListComponent { get; set; }
     public Step selectedStep { get; set; }
-
-
+    
     protected override async Task OnInitializedAsync()
     {
         //steps = await Http.GetJsonAsync<Step[]>("Step");
         selectedStep = steps[0];
         await StepListComponent.SetSelectedIndex(1);
 
+        await base.OnInitializedAsync();
     }
 
     MatIconButton stepMoreButton;
