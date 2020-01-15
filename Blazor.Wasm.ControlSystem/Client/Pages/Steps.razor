@@ -1,90 +1,110 @@
 ﻿@using Blazor.Wasm.ControlSystem.Shared
-@inject HttpClient Http
+
+@*
+    Process step view
+*@
 
 <style>
     .steplist {
-        width:250px;
-        display:inline-block; 
-        float:left;
+        width: 250px;
+        display: inline-block;
+        float: left;
     }
 
     .steplist-item {
-        height:72px;
-        margin:0px;
+        height: 72px;
+        margin: 0px;
     }
-    
+
     .verticalline {
-        width:1px;
-        background-color:darkgray;
-        position:absolute;
-        top:0;
-        bottom:0;        
-        left:318px;
+        width: 1px;
+        background-color: darkgray;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 318px;
     }
- 
+
     .checklist {
-        display:inline-block; 
-        float:left;
-        padding-left:16px;
-        padding-top:8px;
+        display: inline-block;
+        float: left;
+        padding-left: 16px;
+        padding-top: 8px;
     }
 
     @@media (max-width: 599px) {
-         .verticalline {
-            visibility:hidden;
-            width:0px;
+        .verticalline {
+            visibility: hidden;
+            width: 0px;
         }
 
-         .checklist{
-             padding-left:4px;
-         }
-    }    
+        .checklist {
+            padding-left: 4px;
+        }
+    }
 
     .dot {
-      height: 25px;
-      width: 25px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
+        height: 25px;
+        width: 25px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .white-dot {
+        height: 25px;
+        width: 25px;
+        background-color: whitesmoke;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .green-dot {
+        height: 25px;
+        width: 25px;
+        background-color: #39ba13;
+        border-radius: 50%;
+        display: inline-block;
     }
 
     .stepName {
-        padding-left:16px;
+        padding-left: 16px;
     }
 
-    .moreIcon{
+    .moreIcon {
         text-align: right;
-        flex-grow:1;
+        flex-grow: 1;
         margin-right: -12px;
-        color:dimgray;
+        color: dimgray;
     }
-        
 </style>
 
-@if (steps == null) {
+@if (StepController.Steps == null)
+{
     <p><em> Loading...</em></p>
 }
 else
 {
     <span class="steplist">
         <MatList @ref="@StepListComponent">
-            @foreach (var step in steps) {
-                <MatListItem Class="steplist-item" @key="step" @onclick="@(() => { this.selectedStep = step; })">
-                    <span class="dot"></span>
-                    <span class="stepName">@step.Name</span>
-                    @if (step.StepId == 1)
-                    {
+            @foreach (var step in StepController.Steps)
+            {
+            <MatListItem Class="steplist-item" @key="step" @onclick="@(()=>SetSelectedStep(step))">
+                <span class="@GetDotClass(step)"></span>                
+                <span class="stepName">@step.Name</span>
+                @if (step.StepId == 1)
+                {
                     <span class="moreIcon">
                         <MatIconButton Class="icon-color" Icon="more_vert" OnClick="@StepMoreClick" @ref="stepMoreButton"></MatIconButton>
                     </span>
-                    }
-                </MatListItem>
+                }
+            </MatListItem>
             }
         </MatList>
     </span>
     <div class="verticalline"></div>
     <span class="checklist">
-        <Checklist Operations="@selectedStep.Operations" />
+        <Checklist Operations="@SelectedStep.Operations" />
     </span>
 }
 
@@ -97,63 +117,47 @@ else
 
 @code {
 
-    //[Inject]
-    //HttpClient Http;
+    [Inject]
+    HttpClient Http  { get; set; }
 
-    private static readonly Step[] steps = new[]
-    {
-        new Step { StepId = 1, Name = "Measure Gears", State = StepState.NotSet, Operations = new List<Operation> {
-            new Operation() { StepId = 1, Label = "Measure ratio", Hint = "0-12cm" },
-            new Operation() { StepId = 1, Label = "Measure final", Hint = "5-10cm" },
-            new Operation() { StepId = 1, Label = "Weigh set", Hint = "25-50kg" },
-            new Operation() { StepId = 1, Label = "Validate free play", Hint = "1-2mm" },
-            new Operation() { StepId = 1, Label = "Assemble stack", Hint = "" },
-            }
-        },
-        new Step { StepId = 2, Name = "Measure Clutch", State = StepState.NotSet, Operations = new List<Operation> {
-            new Operation() { StepId = 2, Label = "Shim stack", Hint = "3-4" },
-            new Operation() { StepId = 2, Label = "Visually inspect", Hint = "" },
-            new Operation() { StepId = 2, Label = "Weigh basket", Hint = "20-25kg" },
-            }
-        },
-        new Step { StepId = 3, Name = "Install Drive", State = StepState.NotSet, Operations = new List<Operation> {
-            new Operation() { StepId = 3, Label = "Measure spline", Hint = "12-14cm" },
-            new Operation() { StepId = 3, Label = "Measure shim", Hint = "" },
-            new Operation() { StepId = 3, Label = "Insert spline drive", Hint = "" },
-            new Operation() { StepId = 3, Label = "Validate free play", Hint = "" },
-            }
-        },
-        new Step { StepId = 4, Name = "Install Covers", State = StepState.NotSet, Operations = new List<Operation> {
-            new Operation() { StepId = 4, Label = "Selected 12mm bolts", Hint = "" },
-            new Operation() { StepId = 4, Label = "Fastening case", Hint = "" },
-            }
-        },
-        new Step { StepId = 5, Name = "Final Assembly", State = StepState.NotSet, Operations = new List<Operation> {
-            new Operation() { StepId = 1, Label = "Zip ties", Hint = "" },
-            new Operation() { StepId = 1, Label = "Tape", Hint = "" },
-            new Operation() { StepId = 1, Label = "Stickers", Hint = "" },
-            }
-        },
-    };
+    [Inject]
+    StepController StepController { get; set; }
 
+
+    MatIconButton stepMoreButton;
+    BaseMatMenu Menu;
     public MatList StepListComponent { get; set; }
-    public Step selectedStep { get; set; }
-    
+    public Step SelectedStep { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        //steps = await Http.GetJsonAsync<Step[]>("Step");
-        selectedStep = steps[0];
+        SetSelectedStep(StepController.Steps[0]);
         await StepListComponent.SetSelectedIndex(1);
 
         await base.OnInitializedAsync();
     }
 
-    MatIconButton stepMoreButton;
-    BaseMatMenu Menu;
+    public void SetSelectedStep(Step step)
+    {
+        SelectedStep = step;
+        SelectedStep.ValueChanged = () => this.StateHasChanged();
+    }
 
     public void StepMoreClick(MouseEventArgs e)
     {
         this.Menu.OpenAsync(stepMoreButton.Ref);
+    }
+
+    public string GetDotClass(Step step)
+    {
+        if (step.State == StepState.NotSet)
+            return "dot";
+        else if (step.State == StepState.Started)
+            return "white-dot";
+        else if (step.State == StepState.Completed)
+            return "green-dot";
+
+        return string.Empty;
     }
 
 }

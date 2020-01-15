@@ -1,45 +1,59 @@
-﻿<style>
-    .nav-link {  display: block;  padding: 0.5rem 1rem;}
-    .nav-link:hover, .nav-link:focus {  text-decoration: none;}
-    .nav-link.disabled {  color: #6c757d;  pointer-events: none;  cursor: default;}
+﻿@*
+    Navigation panel
+*@
 
-    /*.mat-list-bottom {       
-        position: absolute; 
+<style>
+    .nav-link {
+        display: block;
+        padding: 0.5rem 1rem;
+    }
+
+        .nav-link:hover, .nav-link:focus {
+            text-decoration: none;
+        }
+
+        .nav-link.disabled {
+            color: #6c757d;
+            pointer-events: none;
+            cursor: default;
+        }
+
+    /*.mat-list-bottom {
+        position: absolute;
         bottom:8px;
     }*/
-    
-    .header-icon{
-        padding-top:4px; 
-        text-align:center;
+
+    .header-icon {
+        padding-top: 4px;
+        text-align: center;
     }
 
     .navList {
-        /*margin-top:64px;*/ 
+        /*margin-top:64px;*/
         /*margin-bottom:0px*/
-        position:relative;
+        position: relative;
     }
 
     .mdc-list-item-icon {
         padding-left: 14px;
     }
 
-    .mdc-list-item-text{
+    .mdc-list-item-text {
         padding-left: 16px;
     }
 
-    .navListBottom {        
+    .navListBottom {
         position: absolute;
         bottom: 0px;
         right: 0px;
         left: 0px;
     }
-
 </style>
 
 <div @onclick="OnClick">
-    <div class="header-icon">        
+    <div class="header-icon">
         @*<img height="62" width="62" src="http://danpatrascu.com/wp-content/uploads/2019/05/blazorlogo.png" />
-        <img height="62" width="62" src="https://upload.wikimedia.org/wikipedia/commons/c/c6/Web_Assembly_Logo.svg" />*@
+            <img height="62" width="62" src="https://upload.wikimedia.org/wikipedia/commons/c/c6/Web_Assembly_Logo.svg" />*@
         <MatTooltip Tooltip="Built with Blazor">
             <img height="62" src="https://www.tuannguyen.tech/wp-content/uploads/2019/05/WebAssembly-logo.jpg" />
         </MatTooltip>

@@ -1,5 +1,9 @@
 ﻿@inherits LayoutComponentBase
 
+@*
+    Main layout that wraps the router body content
+*@
+
 <style>
 
     .mdc-top-app-bar__row {
@@ -44,6 +48,12 @@
         bottom: 0px;
         right: 0px;
         left: 0px;
+    }
+
+    .icon-floating {
+        position: absolute;
+        right: 32px;
+        bottom: 32px;
     }
 
     .menu {
@@ -128,6 +138,8 @@
                 </div>
                 <div class="content">
                     @Body
+
+                    <MatFAB Class="icon-floating" Icon="@MatIconNames.Local_shipping" @onclick="@ProductsClick"></MatFAB>
                 </div>
             </MatAppBarContent>
 
@@ -162,11 +174,22 @@
     </MatDialogActions>
 </MatDialog>
 
+<MatDialog @bind-IsOpen="@productsDialogIsOpen">
+    <MatDialogTitle>Available Products</MatDialogTitle>
+    <MatDialogContent>
+        <ProductsDialog />
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@(e => { productsDialogIsOpen = false; })">OK</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
 @code {
 
     public bool NavOpened { get; set; }
     bool accountDialogIsOpen = false;
     bool settingsDialogIsOpen = false;
+    bool productsDialogIsOpen = false;
 
     [Inject]
     protected IMatToaster Toaster { get; set; }
@@ -194,9 +217,14 @@
         accountDialogIsOpen = true;
     }
 
+    public void ProductsClick(MouseEventArgs e)
+    {
+        productsDialogIsOpen = true;
+    }
+
     public void LogoutClicked()
     {
-         Toaster.Add("Logging out shortly", MatToastType.Info);
+        Toaster.Add("Logging out shortly", MatToastType.Info);
     }
 
 }
