@@ -6,22 +6,37 @@ using System.Text;
 
 namespace Blazor.Wasm.ControlSystem.Shared
 {
+    /// <summary>
+    /// An operation is an item in the process that must be completed
+    /// </summary>
     public class Operation //: IValidatableObject
     {
+        public Action ValueChanged { get; set; }
+
         public int OperationId { get; set; }
         public int StepId { get; set; }
 
         public string Label { get; set; }
         public string Hint { get; set; }
 
-        [Required(AllowEmptyStrings=false)]
+        private string _value;
+        [Required(AllowEmptyStrings = false)]
         [CustomOperationValidation]
-        //[StringLength(10, ErrorMessage = "The value is too long.")]
+        [StringLength(10, ErrorMessage = "The value is too long.")]
         //[Range(0, 999.99)]
-        public string Value { get; set; }
-        public bool IsComplete { get; set; }
-        public string Error { get; set; }
+        public string Value
+        {
+            get => _value;
+            set
+            {
+                _value = value;
+                ValueChanged?.Invoke();
+            }
+        }
 
+        public bool IsComplete { get; set; }
+        
+        public string Error { get; set; }
         public bool HasError => !string.IsNullOrWhiteSpace(Error);
 
         //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
