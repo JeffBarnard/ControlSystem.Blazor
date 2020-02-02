@@ -39,7 +39,6 @@ namespace Blazor.Wasm.ControlSystem.Client
                         new Operation() { StepId = 1, OperationId = 1, Label = "Measure final", Hint = "5-10cm" },
                         new Operation() { StepId = 1, OperationId = 1, Label = "Weigh set", Hint = "25-50kg" },
                         new Operation() { StepId = 1, OperationId = 1, Label = "Validate free play", Hint = "1-2mm" },
-                        new Operation() { StepId = 1, OperationId = 1, Label = "Assemble stack", Hint = "" },
                         }
                     },
                     new Step { StepId = 2, Name = "Measure Clutch", State = StepState.NotSet, Operations = new List<Operation> {
