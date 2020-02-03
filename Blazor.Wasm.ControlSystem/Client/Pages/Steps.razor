@@ -6,7 +6,7 @@
 
 <style>
     .steplist {
-        width: 250px;
+        width: 280px;
         display: inline-block;
         float: left;
     }
@@ -22,7 +22,7 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 318px;
+        left: 348px;
     }
 
     .checklist {
@@ -89,16 +89,22 @@ else
         <MatList @ref="@StepListComponent">
             @foreach (var step in StepController.Steps)
             {
-            <MatListItem Class="steplist-item" @key="step" @onclick="@(()=>SetSelectedStep(step))">
-                <span class="@GetDotClass(step)"></span>                
-                <span class="stepName">@step.Name</span>
-                @if (step.StepId == 1)
-                {
+                <MatListItem Class="steplist-item" @key="step" @onclick="@(()=>SetSelectedStep(step))">
+                    @if (step.IsComplete)
+                    {
+                        <MatIcon Icon="check_circle" Style="font-size:26px;color:#39ba13;"></MatIcon>
+                    }
+                    else
+                    {
+                        <span class="@GetDotClass(step)"></span>
+                    }
+                    <span class="stepName">@step.Name</span>
                     <span class="moreIcon">
-                        <MatIconButton Class="icon-color" Icon="more_vert" OnClick="@StepMoreClick" @ref="stepMoreButton"></MatIconButton>
+                        <MatTooltip Tooltip="Options">
+                            <MatIconButton RefBack="@context" Class="icon-color" Icon="more_vert" OnClick="@StepMoreClick" @ref="stepMoreButton"></MatIconButton>
+                        </MatTooltip>
                     </span>
-                }
-            </MatListItem>
+                </MatListItem>
             }
         </MatList>
     </span>
@@ -106,41 +112,77 @@ else
     <span class="checklist">
         <Checklist Operations="@SelectedStep.Operations" />
     </span>
+
+    <embed src="http://www.beemer.com.br/wp-content/uploads/2014/05/S1000RR-Technical-details.pdf#page=7"
+           style="height:900px; width:900px;float:right"
+           type="application/pdf">
+    
+    @*@if (StepController.AllStepsComplete)
+    {
+        <div style="width:100%; height:100%; background-color:whitesmoke;">
+            <MatIcon Icon="check_circle" Style="font-size:26px;color:#39ba13;"></MatIcon>
+        </div>
+    }*@
+
+    @*<MatCard>
+        <MatCardContent>*@
+    @*</MatCardContent>*@
+    @*<MatCardActions>
+            <MatButton>Read</MatButton>
+            <MatButton>Bookmark</MatButton>
+        </MatCardActions>*@
+    @*</MatCard>*@
 }
 
 <MatMenu @ref="Menu">
     <MatList>
-        <MatListItem>Bypass</MatListItem>
-        <MatListItem>Reset</MatListItem>
+        <MatListItem @onclick="@BypassClick">Bypass</MatListItem>
+        <MatListItem @onclick="@ResetClick">Reset</MatListItem>
     </MatList>
 </MatMenu>
 
 @code {
 
     [Inject]
-    HttpClient Http  { get; set; }
+    HttpClient Http { get; set; }
 
     [Inject]
     StepController StepController { get; set; }
 
 
-    MatIconButton stepMoreButton;
-    BaseMatMenu Menu;
+    public MatIconButton stepMoreButton;
+    public BaseMatMenu Menu;
     public MatList StepListComponent { get; set; }
     public Step SelectedStep { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        SetSelectedStep(StepController.Steps[0]);
-        await StepListComponent.SetSelectedIndex(1);
+        if (StepController != null)
+        {
+            SetSelectedStep(StepController.Steps[0]);
+            StepController.ValueChanged = this.OnStepValueChanged;
+        }
 
+        await StepListComponent?.SetSelectedIndex(1);
         await base.OnInitializedAsync();
     }
 
     public void SetSelectedStep(Step step)
     {
         SelectedStep = step;
-        SelectedStep.ValueChanged = () => this.StateHasChanged();
+
+        // set initial state
+        if (SelectedStep.State == StepState.NotSet)
+            SelectedStep.State = StepState.Started;
+    }
+
+    public void OnStepValueChanged()
+    {
+        // progress form
+        if (SelectedStep.State == StepState.Completed)
+            SetSelectedStep(StepController.GetNextStep(SelectedStep));
+
+        this.StateHasChanged();
     }
 
     public void StepMoreClick(MouseEventArgs e)
@@ -156,8 +198,18 @@ else
             return "white-dot";
         else if (step.State == StepState.Completed)
             return "green-dot";
+        else
+            return string.Empty;
+    }
 
-        return string.Empty;
+    public void BypassClick(MouseEventArgs e)
+    {
+        SelectedStep.State = StepState.Completed;
+    }
+
+    public void ResetClick(MouseEventArgs e)
+    {
+        SelectedStep.ResetOperations();
     }
 
 }
