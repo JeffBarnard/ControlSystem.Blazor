@@ -6,12 +6,12 @@ using System.Text;
 namespace Blazor.Wasm.ControlSystem.Shared
 {
     /// <summary>
-    /// A process step.
+    /// A process step that must be completed by the operator.
     /// Steps are completed when all of their operations are completed.
     /// </summary>
     public class Step
     {
-        public Action ValueChanged { get; set; }
+        public Action<Step> StateChanged { get; set; }
 
         public int StepId { get; set; }
         public string Name { get; set; }
@@ -23,16 +23,26 @@ namespace Blazor.Wasm.ControlSystem.Shared
             set
             {
                 _state = value;
-                ValueChanged?.Invoke();
+                StateChanged?.Invoke(this);
             }
         }
+
         public bool IsComplete => State == StepState.Completed;
 
         public List<Operation> Operations { get; set; }
 
-        internal void OnValueChanged()
+        internal void OnOperationValueChanged()
         {
-            State = StepState.Completed;
+            // Evaluate completeness of all operations
+            if (Operations.TrueForAll((o) => !string.IsNullOrWhiteSpace(o.Value)))
+                State = StepState.Completed;
+            else
+                State = StepState.Started;
+        }
+
+        public void ResetOperations()
+        {
+            Operations.ForEach(o => o.Value = string.Empty);
         }
     }
 
