@@ -65,13 +65,7 @@
         margin-top: 64px;
         z-index: 1;
     }
-   
-    @@media (max-width: 599px) {
-         .menu {
-            visibility:hidden;
-            width:0px;
-        }
-    }
+
     .content {
         padding-left: 68px;
         position: absolute;
@@ -82,11 +76,17 @@
         padding-top: 62px;
     }
 
-     @@media (max-width: 599px) {
-         .content {
-           padding-left: 0px;
+    /*small screen size*/
+    @@media (max-width: 599px) {
+        .menu {
+            visibility: hidden;
+            width: 0px;
         }
-    }
+
+        .content {
+            padding-left: 0px;
+        }
+    }   
 
 </style>
 

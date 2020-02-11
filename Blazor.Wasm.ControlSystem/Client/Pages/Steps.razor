@@ -32,6 +32,7 @@
         padding-top: 8px;
     }
 
+    /*small screen size*/
     @@media (max-width: 599px) {
         .verticalline {
             visibility: hidden;
@@ -87,27 +88,34 @@ else
 {
     <span class="steplist">
         <MatList @ref="@StepListComponent">
-            @foreach (var step in StepController.Steps)
+            @foreach (var step in StepList)
             {
-                <MatListItem Class="steplist-item" @key="step" @onclick="@(()=>SetSelectedStep(step))">
-                    @if (step.IsComplete)
-                    {
-                        <MatIcon Icon="check_circle" Style="font-size:26px;color:#39ba13;"></MatIcon>
-                    }
-                    else
-                    {
-                        <span class="@GetDotClass(step)"></span>
-                    }
-                    <span class="stepName">@step.Name</span>
-                    <span class="moreIcon">
-                        <MatTooltip Tooltip="Options">
-                            <MatIconButton RefBack="@context" Class="icon-color" Icon="more_vert" OnClick="@StepMoreClick" @ref="stepMoreButton"></MatIconButton>
-                        </MatTooltip>
-                    </span>
-                </MatListItem>
+            <MatListItem Class="steplist-item" @key="step" @onclick="@(()=>SetSelectedStep(step.Step))">
+                @if (step.Step.IsComplete)
+                {
+                    <MatIcon Icon="check_circle" Style="font-size:26px;color:#39ba13;"></MatIcon>
+                }
+                else
+                {
+                    <span class="@GetDotClass(step.Step)"></span>
+                }
+                <span class="stepName">@step.Step.Name</span>
+                <span class="moreIcon">
+                    <MatTooltip Tooltip="Options">
+                        <MatIconButton RefBack="@step.buttonForwardRef" Class="icon-color" Icon="more_vert" OnClick="@(() => StepMoreClick(step))" @key="step"></MatIconButton>
+                    </MatTooltip>
+                </span>
+                <MatMenu @ref="step.Menu" TargetForwardRef="@step.buttonForwardRef" @key="step">
+                    <MatList>
+                        <MatListItem @onclick="@BypassClick">Bypass</MatListItem>
+                        <MatListItem @onclick="@ResetClick">Reset</MatListItem>
+                    </MatList>
+                </MatMenu>
+            </MatListItem>
             }
         </MatList>
     </span>
+
     <div class="verticalline"></div>
     <span class="checklist">
         <Checklist Operations="@SelectedStep.Operations" />
@@ -116,13 +124,13 @@ else
     <embed src="http://www.beemer.com.br/wp-content/uploads/2014/05/S1000RR-Technical-details.pdf#page=7"
            style="height:900px; width:900px;float:right"
            type="application/pdf">
-    
+
     @*@if (StepController.AllStepsComplete)
-    {
-        <div style="width:100%; height:100%; background-color:whitesmoke;">
-            <MatIcon Icon="check_circle" Style="font-size:26px;color:#39ba13;"></MatIcon>
-        </div>
-    }*@
+        {
+            <div style="width:100%; height:100%; background-color:whitesmoke;">
+                <MatIcon Icon="check_circle" Style="font-size:26px;color:#39ba13;"></MatIcon>
+            </div>
+        }*@
 
     @*<MatCard>
         <MatCardContent>*@
@@ -134,12 +142,6 @@ else
     @*</MatCard>*@
 }
 
-<MatMenu @ref="Menu">
-    <MatList>
-        <MatListItem @onclick="@BypassClick">Bypass</MatListItem>
-        <MatListItem @onclick="@ResetClick">Reset</MatListItem>
-    </MatList>
-</MatMenu>
 
 @code {
 
@@ -149,9 +151,16 @@ else
     [Inject]
     StepController StepController { get; set; }
 
+    // each step has it's own context menu which requires it's own DOM reference
+    public List<StepView> StepList { get; set; }
+    public class StepView
+    {
+        public Step Step { get; set; }
+        public ForwardRef buttonForwardRef { get; set; } = new ForwardRef();
+        public BaseMatMenu Menu { get; set; }
+    }
 
-    public MatIconButton stepMoreButton;
-    public BaseMatMenu Menu;
+
     public MatList StepListComponent { get; set; }
     public Step SelectedStep { get; set; }
 
@@ -161,6 +170,10 @@ else
         {
             SetSelectedStep(StepController.Steps[0]);
             StepController.ValueChanged = this.OnStepValueChanged;
+
+            StepList = new List<StepView>();
+            foreach (var step in StepController.Steps)
+                StepList.Add(new StepView() { Step = step });
         }
 
         await StepListComponent?.SetSelectedIndex(1);
@@ -185,9 +198,9 @@ else
         this.StateHasChanged();
     }
 
-    public void StepMoreClick(MouseEventArgs e)
+    public void StepMoreClick(StepView step)
     {
-        this.Menu.OpenAsync(stepMoreButton.Ref);
+        step.Menu.OpenAsync(step.buttonForwardRef.Current);
     }
 
     public string GetDotClass(Step step)

@@ -7,10 +7,9 @@ namespace Blazor.Wasm.ControlSystem.Shared
     public class StepController
     {
         public List<Step> Steps { get; set; }
+        public bool AllStepsComplete { get; set; }
 
         public Action ValueChanged { get; set; }
-
-        public bool AllStepsComplete { get; set; }
 
         public StepController()
         {
@@ -65,17 +64,38 @@ namespace Blazor.Wasm.ControlSystem.Shared
         internal void OnStepStateChanged(Step step)
         {
             // Evaluate completeness of all operations
-            AllStepsComplete = Steps.TrueForAll(s => s.State == StepState.Completed);
+            AllStepsComplete = Steps?.TrueForAll(s => s.State == StepState.Completed) ?? false;
 
             this.ValueChanged?.Invoke();
         }
 
+        /// <summary>
+        /// Find the next incomplete step
+        /// </summary>
+        /// <param name="step"></param>
+        /// <returns></returns>
         public Step GetNextStep(Step step)
         {
+            // if not found then return the current step
+            Step returnStep = step;
+
+            // if already on last step then return last step
             if (Steps.IndexOf(step) == Steps.Count - 1)
-                return Steps[Steps.Count - 1];
+                returnStep = Steps[Steps.Count - 1];
             else
-                return Steps[Steps.IndexOf(step) + 1];
+            {
+                for (int i = Steps.IndexOf(step); i < Steps.Count - 1; i++)
+                {
+                    // Find the next incomplete step
+                    if (Steps[i + 1].State != StepState.Completed)
+                    {
+                        returnStep = Steps[i + 1];
+                        break;
+                    }
+                }
+            }
+                        
+            return returnStep;
         }
 
     }
