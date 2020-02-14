@@ -16,6 +16,8 @@ namespace Blazor.Wasm.ControlSystem.Shared
         public int OperationId { get; set; }
         public int StepId { get; set; }
 
+        public OperationType Type { get; set; }
+
         public string Label { get; set; }
         public string Hint { get; set; }
 
@@ -32,6 +34,12 @@ namespace Blazor.Wasm.ControlSystem.Shared
                 _value = value;
                 ValueChanged?.Invoke();
             }
+        }
+
+        public bool IsChecked
+        {
+            get => bool.Parse(string.IsNullOrEmpty(Value) ? "False" : Value);
+            set => Value = value == false ? null : value.ToString();
         }
 
         public bool IsComplete { get; set; }

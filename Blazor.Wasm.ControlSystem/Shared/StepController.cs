@@ -16,10 +16,10 @@ namespace Blazor.Wasm.ControlSystem.Shared
             Steps = new List<Step>()
             {
                 new Step { StepId = 1, Name = "Measure Gears", State = StepState.NotSet, Operations = new List<Operation> {
-                    new Operation() { StepId = 1, OperationId = 1, Label = "Measure ratio", Hint = "0-12cm" },
-                    new Operation() { StepId = 1, OperationId = 1, Label = "Measure final", Hint = "5-10cm" },
-                    new Operation() { StepId = 1, OperationId = 1, Label = "Weigh set", Hint = "25-50kg" },
+                    new Operation() { StepId = 1, OperationId = 1, Label = "Measure ratio", Hint = "0-12%" },
+                    new Operation() { StepId = 1, OperationId = 1, Label = "Measure final", Hint = "5-10cm" },                    
                     new Operation() { StepId = 1, OperationId = 1, Label = "Validate free play", Hint = "1-2mm" },
+                    new Operation() { StepId = 1, OperationId = 1, Label = "Validate free play", Type = OperationType.Check },
                     }
                 },
                 new Step { StepId = 2, Name = "Measure Clutch", State = StepState.NotSet, Operations = new List<Operation> {
@@ -32,7 +32,7 @@ namespace Blazor.Wasm.ControlSystem.Shared
                     new Operation() { StepId = 3, OperationId = 1, Label = "Measure spline", Hint = "12-14cm" },
                     new Operation() { StepId = 3, OperationId = 1, Label = "Measure shim", Hint = "" },
                     new Operation() { StepId = 3, OperationId = 1, Label = "Insert spline drive", Hint = "" },
-                    new Operation() { StepId = 3, OperationId = 1, Label = "Validate free play", Hint = "" },
+                    new Operation() { StepId = 3, OperationId = 1, Label = "Validate free play", Type = OperationType.Check },
                     }
                 },
                 new Step { StepId = 4, Name = "Install Covers", State = StepState.NotSet, Operations = new List<Operation> {
@@ -41,8 +41,8 @@ namespace Blazor.Wasm.ControlSystem.Shared
                     }
                 },
                 new Step { StepId = 5, Name = "Verififcation", State = StepState.NotSet, Operations = new List<Operation> {
-                    new Operation() { StepId = 1, OperationId = 1, Label = "Visual Inspect #1", Hint = "" },
-                    new Operation() { StepId = 1, OperationId = 1, Label = "Visual Inspect #2", Hint = "" },                    
+                    new Operation() { StepId = 1, OperationId = 1, Label = "Visual Inspect #1", Type = OperationType.Check },
+                    new Operation() { StepId = 1, OperationId = 1, Label = "Visual Inspect #2", Type = OperationType.Check },                    
                     }
                 },
                 new Step { StepId = 5, Name = "Final Assembly", State = StepState.NotSet, Operations = new List<Operation> {

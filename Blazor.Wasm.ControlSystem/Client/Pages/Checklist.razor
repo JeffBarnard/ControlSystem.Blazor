@@ -15,7 +15,7 @@
 
     .td-field {
         padding-left: 72px;
-        padding-top: 12px;
+        padding-top: 6px;
     }
 
     .text-field {
@@ -30,14 +30,23 @@
         <table>
             @foreach (var operation in Operations)
             {
-                <tr>
-                    <td class="td-label">@operation.Label</td>
-                    <td class="td-field">
-                        @*<InputText id="identifier" @bind-Value="@operation.Value" />*@
+            <tr>
+                <td class="td-label">@operation.Label</td>
+                <td class="td-field">
+                    @if (operation.Type == OperationType.Scan)
+                    {
+
                         <MatTextField Class="text-field" Label="@operation.Hint" @bind-Value="@operation.Value"></MatTextField>
                         <ValidationMessage For="@(() => operation.Value)" />
-                    </td>
-                </tr>
+
+                    }
+                    else if (operation.Type == OperationType.Check)
+                    {
+                        <MatCheckbox Label="@operation.Hint" @bind-Checked="@operation.IsChecked"></MatCheckbox>
+                        @*<ValidationMessage For="@(() => operation.Value)" />*@
+                    }
+                </td>
+            </tr>
             }
         </table>         
         @*<button type="submit">Submit</button>*@
