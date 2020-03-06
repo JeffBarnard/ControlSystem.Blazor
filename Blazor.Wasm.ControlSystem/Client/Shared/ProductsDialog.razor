@@ -13,10 +13,50 @@
         cursor: pointer;
         padding-right: 2px;
     }
+
+    .dialog {
+        min-width:400px;
+        padding-top: 16px;
+        padding-left: 8px;
+        display: inline-flex;
+    }
+
+    .list {
+        min-width: 380px;
+    }
+
 </style>
 
-<div style="padding-top:16px; padding-left:8px; display: inline-flex;">
-    None right now
+<div class="dialog">
+    <MatList SingleSelection="true" TwoLine="true" Class="list">
+        <MatListItem>
+            <MatListItemText>
+                <MatListItemPrimaryText>JH4DA1741HS010452</MatListItemPrimaryText>
+                <MatListItemSecondaryText>Street</MatListItemSecondaryText>
+            </MatListItemText>
+        </MatListItem>
+
+        <MatListItem>
+            <MatListItemText>
+                <MatListItemPrimaryText>JH4DA1741HS010453</MatListItemPrimaryText>
+                <MatListItemSecondaryText>Sport</MatListItemSecondaryText>
+            </MatListItemText>
+        </MatListItem>
+
+        <MatListItem>
+            <MatListItemText>
+                <MatListItemPrimaryText>JH4DA1741HS010454</MatListItemPrimaryText>
+                <MatListItemSecondaryText>Adventure</MatListItemSecondaryText>
+            </MatListItemText>
+        </MatListItem>
+
+        <MatListItem>
+            <MatListItemText>
+                <MatListItemPrimaryText>JH4DA1741HS010455</MatListItemPrimaryText>
+                <MatListItemSecondaryText>Sport</MatListItemSecondaryText>
+            </MatListItemText>
+        </MatListItem>
+    </MatList>
    
 </div>
 
