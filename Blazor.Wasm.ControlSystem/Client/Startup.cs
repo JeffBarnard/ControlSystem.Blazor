@@ -32,7 +32,7 @@ namespace Blazor.Wasm.ControlSystem.Client
 
             // StepController is a singleton that survives the entire lifetime of the application
             StepController stepController = new StepController();
-            stepController.Initialize();
+            stepController.Initialize(string.Empty);
             services.AddSingleton<StepController>(stepController);
 
         }

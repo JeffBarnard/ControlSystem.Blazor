@@ -5,6 +5,16 @@
 *@
 
 <style>
+
+    .waiting-text {
+        position: relative;
+        top: 50%;
+        text-align: center;
+        opacity: 0.54;
+        width: 300px;
+        margin: 0 auto;
+    }
+
     .steplist {
         width: 280px;
         display: inline-block;
@@ -72,9 +82,9 @@
     }
 </style>
 
-@if (StepController.Steps == null)
+@if (StepController?.Steps.Count == 0)
 {
-    <p><em> Loading...</em></p>
+    <MatHeadline4 class="waiting-text">Waiting for Product</MatHeadline4>    
 }
 else
 {
@@ -82,36 +92,37 @@ else
         <MatList @ref="@StepListComponent">
             @foreach (var step in StepList)
             {
-            <MatListItem Class="steplist-item" @key="step" @onclick="@(()=>SetSelectedStep(step.Step))">
-                @if (step.Step.IsComplete)
-                {
-                    <MatIcon Icon="check_circle" Style="font-size:26px;color:#39ba13;"></MatIcon>
-                }
-                else
-                {
-                    <span class="@GetDotClass(step.Step)"></span>
-                }
-                <span class="stepName">@step.Step.Name</span>
-                <span class="moreIcon">
-                    <MatTooltip Tooltip="Options">
-                        <MatIconButton RefBack="@step.buttonForwardRef" Class="icon-color" Icon="more_vert" OnClick="@(() => StepMoreClick(step))" @key="step"></MatIconButton>
-                    </MatTooltip>
-                </span>
-                <MatMenu @ref="step.Menu" TargetForwardRef="@step.buttonForwardRef" @key="step">
-                    <MatList>
-                        <MatListItem @onclick="@BypassClick">Bypass</MatListItem>
-                        <MatListItem @onclick="@ResetClick">Reset</MatListItem>
-                    </MatList>
-                </MatMenu>
-            </MatListItem>
+                <MatListItem Class="steplist-item" @key="step" @onclick="@(()=>SetSelectedStep(step.Step))">
+                    @if (step.Step.IsComplete)
+                    {
+                        <MatIcon Icon="check_circle" Style="font-size:26px;color:#39ba13;"></MatIcon>
+                    }
+                    else
+                    {
+                        <span class="@GetDotClass(step.Step)"></span>
+                    }
+                    <span class="stepName">@step.Step.Name</span>
+                    <span class="moreIcon">
+                        <MatTooltip Tooltip="Options">
+                            <MatIconButton RefBack="@step.buttonForwardRef" Class="icon-color" Icon="more_vert" OnClick="@(() => StepMoreClick(step))" @key="step"></MatIconButton>
+                        </MatTooltip>
+                    </span>
+                    <MatMenu @ref="step.Menu" TargetForwardRef="@step.buttonForwardRef" @key="step">
+                        <MatList>
+                            <MatListItem @onclick="@BypassClick">Bypass</MatListItem>
+                            <MatListItem @onclick="@ResetClick">Reset</MatListItem>
+                        </MatList>
+                    </MatMenu>
+                </MatListItem>
             }
         </MatList>
     </span>
 
     <div class="verticalline"></div>
+
     <span class="checklist">
         <Checklist Operations="@SelectedStep.Operations" />
-    </span>
+    </span>    
 
     <embed src="http://www.beemer.com.br/wp-content/uploads/2014/05/S1000RR-Technical-details.pdf#page=7"
            style="height:900px; width:900px;float:right"
@@ -144,7 +155,7 @@ else
     StepController StepController { get; set; }
 
     // each step has it's own context menu which requires it's own DOM reference
-    public List<StepView> StepList { get; set; }
+    public List<StepView> StepList { get; set; } = new List<StepView>();
     public class StepView
     {
         public Step Step { get; set; }
@@ -152,24 +163,40 @@ else
         public BaseMatMenu Menu { get; set; }
     }
 
-
     public MatList StepListComponent { get; set; }
     public Step SelectedStep { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (StepController != null)
+        StepController.OnInit = async () => { await Initialize(); } ;
+
+        if (StepController.Steps.Count > 0)
+            await Initialize();
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Initialize()
+    {
+        Console.WriteLine("Steps init");
+
+        if (StepController.Steps.Count > 0)
         {
+            Console.WriteLine($"Steps count {StepController.Steps.Count}");
+
             SetSelectedStep(StepController.Steps[0]);
             StepController.ValueChanged = this.OnStepValueChanged;
 
-            StepList = new List<StepView>();
+            StepList.Clear();
             foreach (var step in StepController.Steps)
                 StepList.Add(new StepView() { Step = step });
-        }
 
-        await StepListComponent?.SetSelectedIndex(1);
-        await base.OnInitializedAsync();
+            if (StepListComponent != null)
+                await StepListComponent?.SetSelectedIndex(1);
+
+            Console.WriteLine($"Steps view StateHasChanged");
+            this.StateHasChanged();
+        }
     }
 
     public void SetSelectedStep(Step step)

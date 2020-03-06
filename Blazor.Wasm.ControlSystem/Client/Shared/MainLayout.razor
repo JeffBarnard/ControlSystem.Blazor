@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@using Blazor.Wasm.ControlSystem.Shared
 
 @*
     Main layout that wraps the router body content
@@ -7,13 +8,13 @@
 <style>
 
     .mdc-top-app-bar__row {
-            height: 64px;
+        height: 64px;
     }
 
     .sidebar {
         background: #FFFFFF;
     }
-       
+
     .background_Light {
         background: #F1F1F1;
     }
@@ -39,8 +40,8 @@
     }
 
     .mdc-list-item {
-        height:72px;
-        margin:0px;
+        height: 72px;
+        margin: 0px;
     }
 
     .mat-list-bottom {
@@ -52,8 +53,8 @@
 
     .icon-floating {
         position: absolute;
-        right: 32px;
-        bottom: 32px;
+        right: 36px;
+        bottom: 36px;
     }
 
     .menu {
@@ -86,8 +87,7 @@
         .content {
             padding-left: 0px;
         }
-    }   
-
+    }
 </style>
 
 <MatDrawerContainer Style="width: 100vw; height: 100vh;">
@@ -187,7 +187,7 @@
         <ProductsDialog />
     </MatDialogContent>
     <MatDialogActions>
-        <MatButton OnClick="@(e => { productsDialogIsOpen = false; })">OK</MatButton>
+        <MatButton OnClick="@CloseProductDialog">OK</MatButton>
     </MatDialogActions>
 </MatDialog>
 
@@ -197,6 +197,9 @@
     bool accountDialogIsOpen = false;
     bool settingsDialogIsOpen = false;
     bool productsDialogIsOpen = false;
+
+    [Inject]
+    StepController StepController { get; set; }
 
     [Inject]
     protected IMatToaster Toaster { get; set; }
@@ -232,6 +235,14 @@
     public void LogoutClicked()
     {
         Toaster.Add("Logging out shortly", MatToastType.Info);
+    }
+
+    public void CloseProductDialog()
+    {
+        productsDialogIsOpen = false;
+
+        StepController.Initialize("Street");
+        //this.StateHasChanged();
     }
 
 }
