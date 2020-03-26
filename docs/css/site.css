@@ -1,0 +1,22 @@
+﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+html, body {
+    font-family: Arial;
+    height: 100%;
+    margin: 0;
+}
+
+.icon-color{
+    color:dimgray;
+}
+
+app {
+    /*position: relative;
+    display: flex;
+    flex-direction: column;*/
+}
+
+.validation-message {
+    color: red;
+}
+
