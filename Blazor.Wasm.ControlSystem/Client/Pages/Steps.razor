@@ -42,6 +42,14 @@
         padding-top: 8px;
     }
 
+    .inline-pdf {
+        height: 100%;
+        width: 900px;
+        float: right;
+        /* position: absolute; */
+        right: 0px;
+    }
+
     /*small screen size*/
     @@media (max-width: 599px) {
         .verticalline {
@@ -51,6 +59,26 @@
 
         .checklist {
             padding-left: 4px;
+        }
+
+        .inline-pdf {
+            visibility: hidden;
+        }
+    }
+
+     /*medium screen size*/
+    @@media (max-width: 1260px) {
+        .verticalline {
+            visibility: hidden;
+            width: 0px;
+        }
+
+        .checklist {
+            padding-left: 4px;
+        }
+
+        .inline-pdf {
+            visibility: hidden;
         }
     }
 
@@ -125,7 +153,7 @@ else
     </span>    
 
     <embed src="https://www.beemer.com.br/wp-content/uploads/2014/05/S1000RR-Technical-details.pdf#page=7"
-           style="height:900px; width:900px;float:right"
+           class="inline-pdf"
            type="application/pdf">
 
     @*@if (StepController.AllStepsComplete)
