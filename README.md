@@ -1,4 +1,4 @@
-# Blazor.ControlSystem
+# ControlSystem.Blazor
 
 Clone repo and open the .sln with VS2019+. Ensure you have the latest .Net Core Blazor extensions
 
